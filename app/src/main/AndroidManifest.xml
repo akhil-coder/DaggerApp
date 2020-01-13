@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.appface.akhil.daggerapp">
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-feature android:name="android.hardware.camera2"/>
     <application
         android:usesCleartextTraffic="true"
         android:name=".BaseApplication"
@@ -20,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.main.scanner.ScannerActivity" />
     </application>
 
 </manifest>

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">DaggerApp</string>
     <string name="log_out">Log out</string>
+    <string name="profile">Profile</string>
+    <string name="navigation">Navigation</string>
+    <string name="posts">Posts</string>
+    <string name="scan">Scan</string>
 </resources>

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.graphics.drawable.Drawable;
 
 import com.appface.akhil.daggerapp.R;
+import com.appface.akhil.daggerapp.model.StockRepository;
 import com.appface.akhil.daggerapp.util.Constants;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -33,7 +34,7 @@ public class AppModule {
 
     @Singleton
     @Provides
-    static RequestOptions ProvideRequestOptions() {
+    static RequestOptions provideRequestOptions() {
         return RequestOptions
                 .placeholderOf(R.drawable.malecostume)
                 .error(R.drawable.whitebg);

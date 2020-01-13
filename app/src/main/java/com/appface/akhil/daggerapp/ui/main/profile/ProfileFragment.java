@@ -67,9 +67,7 @@ public class ProfileFragment extends DaggerFragment {
                             setErrorDetails(userAuthResource.message);
                             break;
                         }
-
                     }
-
                 }
             }
         });
