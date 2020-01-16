@@ -7,6 +7,7 @@ import com.appface.akhil.daggerapp.SessionManager;
 import com.appface.akhil.daggerapp.model.Stock;
 import com.appface.akhil.daggerapp.model.StockRepository;
 import com.appface.akhil.daggerapp.model.StockResponse;
+import com.appface.akhil.daggerapp.model.StockUnavailable;
 import com.appface.akhil.daggerapp.models.Post;
 import com.appface.akhil.daggerapp.network.main.MainApi;
 import com.appface.akhil.daggerapp.ui.main.Resource;
@@ -35,6 +36,7 @@ public class StockViewModel extends AndroidViewModel {
     private static final String TAG = "StockViewModel";
     private StockRepository repository;
     private MediatorLiveData<Resource<List<Stock>>> stockList;
+    private MediatorLiveData<Resource<List<StockUnavailable>>> stockListUnavailable;
     private final SessionManager sessionManager;
     private final MainApi mainApi;
 
@@ -80,6 +82,36 @@ public class StockViewModel extends AndroidViewModel {
         return stockList;
     }
 
+    public MediatorLiveData<Resource<List<StockUnavailable>>> observeUnavailableStocks() {
+        if (stockListUnavailable == null) {
+            stockListUnavailable = new MediatorLiveData<>();
+            stockListUnavailable.setValue(Resource.loading((List<StockUnavailable>) null));
+
+            final LiveData<Resource<List<StockUnavailable>>> source = LiveDataReactiveStreams.fromPublisher(
+                    getAllStocksUnavailable().map(new Function<List<StockUnavailable>, Resource<List<StockUnavailable>>>() {
+                        @Override
+                        public Resource<List<StockUnavailable>> apply(List<StockUnavailable> stocks) throws Exception {
+                            if (stocks.size() > 0) {
+                                if (stocks.get(0).getId() == -1) {
+                                    return Resource.error("Something went wrong", null);
+                                }
+                            }
+                            return Resource.success(stocks);
+                        }
+                    }).subscribeOn(Schedulers.io())
+            );
+
+            stockListUnavailable.addSource(source, new Observer<Resource<List<StockUnavailable>>>() {
+                @Override
+                public void onChanged(Resource<List<StockUnavailable>> listResource) {
+                    stockListUnavailable.setValue(listResource);
+                    stockListUnavailable.removeSource(source);
+                }
+            });
+        }
+        return stockListUnavailable;
+    }
+
     public void checkStockOnline(long barcode) {
 
         mainApi.retrieveproduct(barcode)
@@ -88,8 +120,28 @@ public class StockViewModel extends AndroidViewModel {
                 .subscribeWith(new DisposableSingleObserver<StockResponse>() {
                     @Override
                     public void onSuccess(StockResponse stockResponse) {
-                        if(stockResponse.getStatusCode().equals("200"))
-                        insertStockReactivly(stockResponse);
+                        if (stockResponse.getStatusCode().equals("200"))
+                            insertStockReactivly(stockResponse);
+                        else if (stockResponse.getStatusCode().equals("400"))
+                            insertUnavailableStockReactivly(barcode);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "onError: ", e);
+                    }
+                });
+    }
+
+    private void insertUnavailableStockReactivly(long barcode) {
+        StockUnavailable stockUnavailable = new StockUnavailable(barcode);
+        repository.insertUnavailable(stockUnavailable)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: Entry Saved in unavailable stock ");
                     }
 
                     @Override
@@ -116,7 +168,6 @@ public class StockViewModel extends AndroidViewModel {
                 });
     }
 
-
     public Completable insert(Stock stock) {
         return repository.insert(stock);
     }
@@ -131,5 +182,9 @@ public class StockViewModel extends AndroidViewModel {
 
     public Flowable<List<Stock>> getAllStocks() {
         return repository.getAllStocks();
+    }
+
+    public Flowable<List<StockUnavailable>> getAllStocksUnavailable() {
+        return repository.getAllUnavailableStocks();
     }
 }

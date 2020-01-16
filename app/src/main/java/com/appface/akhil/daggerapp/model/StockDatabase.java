@@ -6,11 +6,12 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Stock.class}, version = 3)
+@Database(entities = {Stock.class, StockUnavailable.class}, version = 4)
 public abstract class StockDatabase extends RoomDatabase {
 
     private static StockDatabase instance;
     public abstract StockDao stockdao();
+    public abstract StockUnavailableDao stockUnavailableDao();
 
     public static synchronized StockDatabase getInstance(Context context) {
         if(instance == null){

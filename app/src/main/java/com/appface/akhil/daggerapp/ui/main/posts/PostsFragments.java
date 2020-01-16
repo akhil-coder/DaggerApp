@@ -47,7 +47,7 @@ public class PostsFragments extends DaggerFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.recycler_view);
-
+        getActivity().setTitle("Stock Available");
         viewModel = ViewModelProviders.of(this, providerFactory).get(StockViewModel.class);
         initRecyclerView();
         subscribeObservers();

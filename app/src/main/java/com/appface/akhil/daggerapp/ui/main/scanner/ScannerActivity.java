@@ -51,7 +51,6 @@ public class ScannerActivity extends DaggerAppCompatActivity implements ZXingSca
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
     private final CompositeDisposable mDisposable = new CompositeDisposable();
-    Stock newstock;
     private StockViewModel viewModel;
     public static final int TIMER_VALUE = 30;
 
@@ -158,7 +157,7 @@ public class ScannerActivity extends DaggerAppCompatActivity implements ZXingSca
             long barcode = Long.parseLong(scanResult);
             viewModel.checkStockOnline(barcode);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "handleResult: ",e );
         }
         runTimer();
     }
