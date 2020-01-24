@@ -23,4 +23,10 @@ public interface StockDao {
 
     @Query("SELECT * FROM stock_table")
     Flowable<List<Stock>> getAllStocks();
+
+    @Query("SELECT DISTINCT brand FROM stock_table")
+    Flowable<List<Category>> getAllCategories();
+
+    @Query("SELECT DISTINCT * FROM stock_table WHERE brand = :brandName")
+    Flowable<List<Stock>> getCategoryEntires(String brandName);
 }

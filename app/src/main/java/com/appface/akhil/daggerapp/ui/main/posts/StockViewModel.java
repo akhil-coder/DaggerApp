@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.appface.akhil.daggerapp.SessionManager;
+import com.appface.akhil.daggerapp.model.Category;
 import com.appface.akhil.daggerapp.model.Stock;
 import com.appface.akhil.daggerapp.model.StockRepository;
 import com.appface.akhil.daggerapp.model.StockResponse;
@@ -36,6 +37,8 @@ public class StockViewModel extends AndroidViewModel {
     private static final String TAG = "StockViewModel";
     private StockRepository repository;
     private MediatorLiveData<Resource<List<Stock>>> stockList;
+    private MediatorLiveData<Resource<List<Category>>> categoryList;
+
     private MediatorLiveData<Resource<List<StockUnavailable>>> stockListUnavailable;
     private final SessionManager sessionManager;
     private final MainApi mainApi;
@@ -80,6 +83,64 @@ public class StockViewModel extends AndroidViewModel {
             });
         }
         return stockList;
+    }
+
+
+    public MediatorLiveData<Resource<List<Stock>>> observeSelectedCategoryEntires(String brand) {
+        if (stockList == null) {
+            stockList = new MediatorLiveData<>();
+            stockList.setValue(Resource.loading((List<Stock>) null));
+
+            final LiveData<Resource<List<Stock>>> source = LiveDataReactiveStreams.fromPublisher(
+                    getselectedCategoryEntries(brand).map(new Function<List<Stock>, Resource<List<Stock>>>() {
+                        @Override
+                        public Resource<List<Stock>> apply(List<Stock> stocks) throws Exception {
+                            if (stocks.size() > 0) {
+                                if (stocks.get(0).getId() == -1) {
+                                    return Resource.error("Something went wrong", null);
+                                }
+                            }
+                            return Resource.success(stocks);
+                        }
+                    }).subscribeOn(Schedulers.io())
+
+            );
+
+            stockList.addSource(source, new Observer<Resource<List<Stock>>>() {
+                @Override
+                public void onChanged(Resource<List<Stock>> listResource) {
+                    stockList.setValue(listResource);
+                    stockList.removeSource(source);
+                }
+            });
+        }
+        return stockList;
+    }
+
+    public MediatorLiveData<Resource<List<Category>>> observeAllCategories() {
+        if (categoryList == null) {
+            categoryList = new MediatorLiveData<>();
+            categoryList.setValue(Resource.loading((List<Category>) null));
+
+            final LiveData<Resource<List<Category>>> source = LiveDataReactiveStreams.fromPublisher(
+                    getAllCategories().map(new Function<List<Category>, Resource<List<Category>>>() {
+                        @Override
+                        public Resource<List<Category>> apply(List<Category> stocks) throws Exception {
+
+                            return Resource.success(stocks);
+                        }
+                    }).subscribeOn(Schedulers.io())
+            );
+
+            categoryList.addSource(source, new Observer<Resource<List<Category>>>() {
+                @Override
+                public void onChanged(Resource<List<Category>> listResource) {
+                    categoryList.setValue(listResource);
+                    categoryList.removeSource(source);
+                }
+            });
+        }
+        return categoryList;
     }
 
     public MediatorLiveData<Resource<List<StockUnavailable>>> observeUnavailableStocks() {
@@ -182,6 +243,12 @@ public class StockViewModel extends AndroidViewModel {
 
     public Flowable<List<Stock>> getAllStocks() {
         return repository.getAllStocks();
+    }
+    public Flowable<List<Stock>> getselectedCategoryEntries(String brandName) {
+        return repository.getselectedCategoryEntries(brandName);
+    }
+    public Flowable<List<Category>> getAllCategories() {
+        return repository.getAllCategories();
     }
 
     public Flowable<List<StockUnavailable>> getAllStocksUnavailable() {

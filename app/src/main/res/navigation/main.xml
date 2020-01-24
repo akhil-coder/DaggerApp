@@ -12,13 +12,33 @@
     <fragment
         android:id="@id/foundScreen"
         android:name="com.appface.akhil.daggerapp.ui.main.posts.PostsFragments"
-        android:label="@string/posts"
-        tools:layout="@layout/fragment_posts" />
+        android:label="@string/found"
+        tools:layout="@layout/fragment_posts" >
+
+        <action
+            android:id="@+id/actionStartChat"
+            app:destination="@id/subCategoryScreen">
+        <argument
+            android:name="brandName"
+            app:argType="string" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@id/notFoundScreen"
         android:name="com.appface.akhil.daggerapp.ui.main.profile.ProfileFragment"
         android:label="@string/notfound"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@id/subCategoryScreen"
+        android:name="com.appface.akhil.daggerapp.ui.main.posts.subcategory.SubCategoryFragment"
+        android:label="@string/notfound"
+        tools:layout="@layout/fragment_posts" />
+
+    <activity
+        android:id="@id/settingsScreen"
+        android:name="com.appface.akhil.daggerapp.ui.main.settings.SettingsActivity"
+        android:label="Settings" />
 
 </navigation>

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appface.akhil.daggerapp.R;
+import com.appface.akhil.daggerapp.model.Category;
 import com.appface.akhil.daggerapp.model.Stock;
 import com.appface.akhil.daggerapp.models.Post;
 import com.appface.akhil.daggerapp.ui.main.Resource;
@@ -47,17 +48,16 @@ public class PostsFragments extends DaggerFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.recycler_view);
-        getActivity().setTitle("Stock Available");
         viewModel = ViewModelProviders.of(this, providerFactory).get(StockViewModel.class);
         initRecyclerView();
         subscribeObservers();
     }
 
     private void subscribeObservers(){
-        viewModel.observePosts().removeObservers(getViewLifecycleOwner());
-        viewModel.observePosts().observe(getViewLifecycleOwner(), new Observer<Resource<List<Stock>>>() {
+        viewModel.observeAllCategories().removeObservers(getViewLifecycleOwner());
+        viewModel.observeAllCategories().observe(getViewLifecycleOwner(), new Observer<Resource<List<Category>>>() {
             @Override
-            public void onChanged(Resource<List<Stock>> listResource) {
+            public void onChanged(Resource<List<Category>> listResource) {
                 if(listResource != null) {
                     Log.d(TAG, "onChanged: " + listResource.data);
                     switch (listResource.status){

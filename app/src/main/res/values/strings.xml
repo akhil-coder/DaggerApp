@@ -6,4 +6,10 @@
     <string name="posts">Posts</string>
     <string name="scan">Scan</string>
     <string name="notfound">Not Found</string>
+    <string name="scan_time">Scan Time 2 Sec</string>
+    <string name="scan_time_2">Scan Time 3 Sec</string>
+    <string name="found">Found</string>
+    <string name="not_found">Not Found</string>
+    <string name="settings">Settings</string>
+
 </resources>

@@ -4,7 +4,6 @@ import android.app.Application;
 
 import java.util.List;
 
-import androidx.lifecycle.LiveData;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 
@@ -14,6 +13,8 @@ public class StockRepository {
     private StockUnavailableDao stockUnavailableDao;
     private Flowable<List<Stock>> allStocks;
     private Flowable<List<StockUnavailable>> allStocksUnavailable;
+    private Flowable<List<Category>> allCategories;
+    private Flowable<List<Stock>> allCategoryEntires;
 
     public StockRepository(Application application) {
         StockDatabase stockDatabase = StockDatabase.getInstance(application);
@@ -23,6 +24,7 @@ public class StockRepository {
 
         allStocks = stockDao.getAllStocks();
         allStocksUnavailable = stockUnavailableDao.getAllStocks();
+        allCategories = stockDao.getAllCategories();
     }
 
     public Completable insert(final Stock stock) {
@@ -40,6 +42,12 @@ public class StockRepository {
     public Flowable<List<Stock>> getAllStocks() {
         return allStocks;
     }
+
+    public Flowable<List<Category>> getAllCategories() {
+        return allCategories;
+    }
+
+    public Flowable<List<Stock>> getselectedCategoryEntries(String brandName) {return stockDao.getCategoryEntires(brandName);}
 
     public Completable insertUnavailable(final StockUnavailable stock) {
         return stockUnavailableDao.insert(stock);

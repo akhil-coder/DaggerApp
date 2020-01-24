@@ -2,6 +2,7 @@ package com.appface.akhil.daggerapp.di.main;
 
 import com.appface.akhil.daggerapp.network.main.MainApi;
 import com.appface.akhil.daggerapp.ui.main.posts.PostsRecyclerAdapter;
+import com.appface.akhil.daggerapp.ui.main.posts.subcategory.SubCategoryRecyclerAdapter;
 import com.appface.akhil.daggerapp.ui.main.profile.UnavailbaleStocksRecyclerAdapter;
 
 import dagger.Module;
@@ -19,6 +20,11 @@ public class MainModule {
     @Provides
     static UnavailbaleStocksRecyclerAdapter provideUnavailableAdapter(){
         return new UnavailbaleStocksRecyclerAdapter();
+    }
+
+    @Provides
+    static SubCategoryRecyclerAdapter provideSubCategoryAdapter(){
+        return new SubCategoryRecyclerAdapter();
     }
 
     @Provides

@@ -9,11 +9,11 @@
         <item
             android:id="@+id/foundScreen"
             android:icon="@drawable/ic_speaker_notes_black_24dp"
-            android:title="@string/navigation" />
+            android:title="@string/found" />
 
         <item
             android:id="@+id/notFoundScreen"
             android:icon="@drawable/ic_speaker_notes_off_black_24dp"
-            android:title="@string/profile" />
+            android:title="@string/not_found" />
     </group>
 </menu>

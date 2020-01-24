@@ -1,6 +1,7 @@
 package com.appface.akhil.daggerapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -30,7 +31,7 @@ public class BaseActivity extends DaggerAppCompatActivity {
         sessionManager.getAuthUser().observe(this, new Observer<AuthResource<User>>() {
             @Override
             public void onChanged(AuthResource<User> userAuthResource) {
-                if(userAuthResource != null) {
+                if (userAuthResource != null) {
                     switch (userAuthResource.status) {
                         case LOADING: {
                             break;
@@ -40,7 +41,7 @@ public class BaseActivity extends DaggerAppCompatActivity {
                             break;
                         }
                         case ERROR: {
-                            Log.e(TAG, "onChanged: " + userAuthResource.message );
+                            Log.e(TAG, "onChanged: " + userAuthResource.message);
                             break;
                         }
                         case NOT_AUTHENTICATED: {
@@ -59,4 +60,25 @@ public class BaseActivity extends DaggerAppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    protected void storeSharedPreferences(int sec) {
+        SharedPreferences sharedPreferences
+                = getSharedPreferences("MySharedPref",
+                MODE_PRIVATE);
+
+        SharedPreferences.Editor myEdit
+                = sharedPreferences.edit();
+
+        myEdit.putInt("time", sec);
+        myEdit.commit();
+    }
+
+    protected int loadSharedPreferences(){
+        SharedPreferences sh
+                = getSharedPreferences("MySharedPref",
+                MODE_PRIVATE);
+        int a = sh.getInt("time", 2);
+        return a;
+    }
+
 }

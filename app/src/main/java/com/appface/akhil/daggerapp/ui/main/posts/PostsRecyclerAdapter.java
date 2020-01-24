@@ -1,35 +1,40 @@
 package com.appface.akhil.daggerapp.ui.main.posts;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appface.akhil.daggerapp.R;
+import com.appface.akhil.daggerapp.model.Category;
 import com.appface.akhil.daggerapp.model.Stock;
-import com.appface.akhil.daggerapp.models.Post;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.functions.Action;
 
 public class PostsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Stock> posts = new ArrayList<>();
+    private List<Category> posts = new ArrayList<>();
+    String brand;
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_post_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_category_list_item, parent, false);
+        PostViewHolder postViewHolder = new PostViewHolder(view);
         return new PostViewHolder(view);
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((PostViewHolder)holder).bind(posts.get(position));
+        ((PostViewHolder) holder).bind(posts.get(position));
     }
 
     @Override
@@ -38,27 +43,41 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         return posts.size();
     }
 
-    public void setPosts(List<Stock> posts){
+    public void setPosts(List<Category> posts) {
         this.posts = posts;
         notifyDataSetChanged();
     }
 
-    public class PostViewHolder extends RecyclerView.ViewHolder{
 
-        TextView title, productDetails, stockQty;
+    public class PostViewHolder extends RecyclerView.ViewHolder {
 
+        TextView title;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+
+                        brand = posts.get(adapterPosition).getBrand();
+//                      PostsFragmentsDirections.ActionStartChat actionStartChat = PostsFragmentsDirections.actionStartChat(brand);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("brandname", brand);
+                        Navigation.findNavController(v).navigate(R.id.subCategoryScreen, bundle);
+                    }
+                }
+            });
+
             title = itemView.findViewById(R.id.title);
-            productDetails = itemView.findViewById(R.id.tv_productdetails);
-            stockQty = itemView.findViewById(R.id.tv_stockqty);
         }
 
-        public void bind(Stock stock){
-            title.setText(stock.getBrand());
-            productDetails.setText(stock.getProductDetails());
-            stockQty.setText(String.valueOf(stock.getStockQty()));
+            public void bind (Category stock){
+                title.setText(stock.getBrand());
+            }
         }
     }
-}
+

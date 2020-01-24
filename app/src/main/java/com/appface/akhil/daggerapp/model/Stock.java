@@ -3,10 +3,11 @@ package com.appface.akhil.daggerapp.model;
 import java.util.Objects;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
-@Entity(tableName = "Stock_table")
+@Entity(tableName = "Stock_table", indices = {@Index(value = "barcode", unique = true)})
 public class Stock {
 
     @PrimaryKey(autoGenerate = true)

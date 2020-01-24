@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.appface.akhil.daggerapp.BaseActivity;
 import com.appface.akhil.daggerapp.R;
 import com.appface.akhil.daggerapp.model.Stock;
 import com.appface.akhil.daggerapp.model.StockRepository;
@@ -45,14 +46,14 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
 
-public class ScannerActivity extends DaggerAppCompatActivity implements ZXingScannerView.ResultHandler {
+public class ScannerActivity extends BaseActivity implements ZXingScannerView.ResultHandler {
 
     private static final String TAG = "ScannerActivity";
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
     private final CompositeDisposable mDisposable = new CompositeDisposable();
     private StockViewModel viewModel;
-    public static final int TIMER_VALUE = 30;
+    public static int TIMER_VALUE ;
 
     @Inject
     StockRepository stockRepository;
@@ -63,13 +64,11 @@ public class ScannerActivity extends DaggerAppCompatActivity implements ZXingSca
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        TIMER_VALUE = loadSharedPreferences();
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
         viewModel = ViewModelProviders.of(this, providerFactory).get(StockViewModel.class);
-
         checkPermissions();
-
     }
 
     private void checkPermissions() {
@@ -164,7 +163,7 @@ public class ScannerActivity extends DaggerAppCompatActivity implements ZXingSca
 
     private void runTimer() {
         Completable
-                .timer(3, TimeUnit.SECONDS)
+                .timer(TIMER_VALUE, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableCompletableObserver() {

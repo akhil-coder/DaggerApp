@@ -50,7 +50,6 @@ public class ProfileFragment extends DaggerFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Toast.makeText(getActivity(), "Profile Fragment", Toast.LENGTH_SHORT).show();
         return inflater.inflate(R.layout.fragment_posts, container, false);
     }
 
