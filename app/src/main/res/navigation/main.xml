@@ -33,7 +33,7 @@
     <fragment
         android:id="@id/subCategoryScreen"
         android:name="com.appface.akhil.daggerapp.ui.main.posts.subcategory.SubCategoryFragment"
-        android:label="@string/notfound"
+        android:label="@string/found"
         tools:layout="@layout/fragment_posts" />
 
     <activity

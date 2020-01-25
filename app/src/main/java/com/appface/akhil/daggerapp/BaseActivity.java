@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 import dagger.android.support.DaggerAppCompatActivity;
 
 public class BaseActivity extends DaggerAppCompatActivity {
@@ -20,6 +21,7 @@ public class BaseActivity extends DaggerAppCompatActivity {
 
     @Inject
     public SessionManager sessionManager;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,11 +76,9 @@ public class BaseActivity extends DaggerAppCompatActivity {
     }
 
     protected int loadSharedPreferences(){
-        SharedPreferences sh
-                = getSharedPreferences("MySharedPref",
-                MODE_PRIVATE);
-        int a = sh.getInt("time", 2);
-        return a;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String dropdown = sharedPreferences.getString("dropdown", "2");
+        return Integer.parseInt(dropdown);
     }
 
 }

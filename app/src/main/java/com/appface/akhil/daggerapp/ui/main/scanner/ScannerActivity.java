@@ -1,5 +1,6 @@
 package com.appface.akhil.daggerapp.ui.main.scanner;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.appface.akhil.daggerapp.BaseActivity;
@@ -154,7 +156,13 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         final String scanResult = result.getText();
         try {
             long barcode = Long.parseLong(scanResult);
-            viewModel.checkStockOnline(barcode);
+            boolean resultStatus = viewModel.checkStockOnline(barcode);
+            if(resultStatus){
+                Dialog dialog = new Dialog(ScannerActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_stock_not_found);
+                dialog.show();
+            }
         } catch (Exception e) {
             Log.e(TAG, "handleResult: ",e );
         }

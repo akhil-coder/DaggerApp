@@ -9,7 +9,6 @@ import com.appface.akhil.daggerapp.model.Stock;
 import com.appface.akhil.daggerapp.model.StockRepository;
 import com.appface.akhil.daggerapp.model.StockResponse;
 import com.appface.akhil.daggerapp.model.StockUnavailable;
-import com.appface.akhil.daggerapp.models.Post;
 import com.appface.akhil.daggerapp.network.main.MainApi;
 import com.appface.akhil.daggerapp.ui.main.Resource;
 
@@ -42,6 +41,7 @@ public class StockViewModel extends AndroidViewModel {
     private MediatorLiveData<Resource<List<StockUnavailable>>> stockListUnavailable;
     private final SessionManager sessionManager;
     private final MainApi mainApi;
+    private boolean status;
 
     @Inject
     Retrofit retrofit;
@@ -173,7 +173,7 @@ public class StockViewModel extends AndroidViewModel {
         return stockListUnavailable;
     }
 
-    public void checkStockOnline(long barcode) {
+    public boolean checkStockOnline(long barcode) {
 
         mainApi.retrieveproduct(barcode)
                 .subscribeOn(Schedulers.io())
@@ -181,10 +181,13 @@ public class StockViewModel extends AndroidViewModel {
                 .subscribeWith(new DisposableSingleObserver<StockResponse>() {
                     @Override
                     public void onSuccess(StockResponse stockResponse) {
-                        if (stockResponse.getStatusCode().equals("200"))
+                        if (stockResponse.getStatusCode().equals("200")) {
                             insertStockReactivly(stockResponse);
-                        else if (stockResponse.getStatusCode().equals("400"))
+                            status = true;
+                        } else if (stockResponse.getStatusCode().equals("400")) {
                             insertUnavailableStockReactivly(barcode);
+                            status = false;
+                        }
                     }
 
                     @Override
@@ -192,6 +195,7 @@ public class StockViewModel extends AndroidViewModel {
                         Log.e(TAG, "onError: ", e);
                     }
                 });
+        return status;
     }
 
     private void insertUnavailableStockReactivly(long barcode) {
@@ -244,9 +248,11 @@ public class StockViewModel extends AndroidViewModel {
     public Flowable<List<Stock>> getAllStocks() {
         return repository.getAllStocks();
     }
+
     public Flowable<List<Stock>> getselectedCategoryEntries(String brandName) {
         return repository.getselectedCategoryEntries(brandName);
     }
+
     public Flowable<List<Category>> getAllCategories() {
         return repository.getAllCategories();
     }

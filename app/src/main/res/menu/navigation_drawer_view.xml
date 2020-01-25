@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/scannerScreen"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="@string/scan" />
+
+        <item
+            android:id="@+id/foundScreen"
+            android:icon="@drawable/ic_speaker_notes_black_24dp"
+            android:title="@string/found" />
+
+        <item
+            android:id="@+id/notFoundScreen"
+            android:icon="@drawable/ic_speaker_notes_off_black_24dp"
+            android:title="@string/not_found" />
+
+        <item
+            android:id="@+id/settingsScreen"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/settings" />
+    </group>
+</menu>

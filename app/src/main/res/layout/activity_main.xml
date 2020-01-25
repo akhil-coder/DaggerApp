@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -45,7 +44,9 @@
             android:layout_gravity="bottom"
             android:background="@color/colorPrimary"
             android:gravity="bottom"
-            app:menu="@menu/bottom_drawer_view" />
+            app:menu="@menu/bottom_drawer_view"
+            app:itemTextColor="@color/colorPrimaryDark"
+            app:itemIconTint="@color/bottom_navigation_selector"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -55,7 +56,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_nav_layout"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/colorPrimaryDark"
+        app:itemTextColor="@color/colorPrimaryDark"
         app:menu="@menu/navigation_drawer_view" />
 </androidx.drawerlayout.widget.DrawerLayout>

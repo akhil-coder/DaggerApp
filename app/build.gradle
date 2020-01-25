@@ -76,5 +76,8 @@ dependencies {
 
     apply plugin: "androidx.navigation.safeargs"
 
+    // Preference
+    def preference_version = "1.1.0"
+    implementation "androidx.preference:preference:$preference_version"
 
 }

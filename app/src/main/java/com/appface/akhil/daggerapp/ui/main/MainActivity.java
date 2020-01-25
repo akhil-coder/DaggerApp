@@ -70,7 +70,6 @@ public class MainActivity extends BaseActivity  {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         this.menu = menu;
-        initMenuTitles();
         return true;
     }
 
@@ -83,35 +82,31 @@ public class MainActivity extends BaseActivity  {
                 return true;
             }
 
-            case R.id.scanTime: {
-                updateMenuTitles();
-            }
-
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+// TODO: UPdate menu items
+//    private void initMenuTitles() {
+//        MenuItem bedMenuItem = menu.findItem(R.id.scanTime);
+//        int i = loadSharedPreferences();
+//        if (i == 2) {
+//            bedMenuItem.setTitle(R.string.scan_time);
+//        } else {
+//            bedMenuItem.setTitle(R.string.scan_time_2);
+//        }
+//    }
 
-    private void initMenuTitles() {
-        MenuItem bedMenuItem = menu.findItem(R.id.scanTime);
-        int i = loadSharedPreferences();
-        if (i == 2) {
-            bedMenuItem.setTitle(R.string.scan_time);
-        } else {
-            bedMenuItem.setTitle(R.string.scan_time_2);
-        }
-    }
-
-    private void updateMenuTitles() {
-        MenuItem bedMenuItem = menu.findItem(R.id.scanTime);
-        if (bedMenuItem.getTitle().equals(getString(R.string.scan_time))) {
-            bedMenuItem.setTitle(R.string.scan_time_2);
-            storeSharedPreferences(3);
-        } else {
-            bedMenuItem.setTitle(R.string.scan_time);
-            storeSharedPreferences(2);
-        }
-    }
+//    private void updateMenuTitles() {
+//        MenuItem bedMenuItem = menu.findItem(R.id.scanTime);
+//        if (bedMenuItem.getTitle().equals(getString(R.string.scan_time))) {
+//            bedMenuItem.setTitle(R.string.scan_time_2);
+//            storeSharedPreferences(3);
+//        } else {
+//            bedMenuItem.setTitle(R.string.scan_time);
+//            storeSharedPreferences(2);
+//        }
+//    }
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navControllerBottomDrawer, appBarConfig) || super.onSupportNavigateUp();
