@@ -39,4 +39,13 @@ public class StockResponse implements Serializable {
     public void setData(Stock data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "StockResponse{" +
+                "message='" + message + '\'' +
+                ", statusCode='" + statusCode + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

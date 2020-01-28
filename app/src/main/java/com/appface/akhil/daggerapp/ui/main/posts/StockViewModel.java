@@ -1,8 +1,11 @@
 package com.appface.akhil.daggerapp.ui.main.posts;
 
 import android.app.Application;
+import android.app.Dialog;
 import android.util.Log;
+import android.view.Window;
 
+import com.appface.akhil.daggerapp.R;
 import com.appface.akhil.daggerapp.SessionManager;
 import com.appface.akhil.daggerapp.model.Category;
 import com.appface.akhil.daggerapp.model.Stock;
@@ -11,6 +14,7 @@ import com.appface.akhil.daggerapp.model.StockResponse;
 import com.appface.akhil.daggerapp.model.StockUnavailable;
 import com.appface.akhil.daggerapp.network.main.MainApi;
 import com.appface.akhil.daggerapp.ui.main.Resource;
+import com.appface.akhil.daggerapp.ui.main.scanner.ScannerActivity;
 
 import java.util.List;
 
@@ -24,6 +28,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
@@ -40,8 +45,9 @@ public class StockViewModel extends AndroidViewModel {
 
     private MediatorLiveData<Resource<List<StockUnavailable>>> stockListUnavailable;
     private final SessionManager sessionManager;
-    private final MainApi mainApi;
+    public final MainApi mainApi;
     private boolean status;
+    boolean testSingle;
 
     @Inject
     Retrofit retrofit;
@@ -181,12 +187,21 @@ public class StockViewModel extends AndroidViewModel {
                 .subscribeWith(new DisposableSingleObserver<StockResponse>() {
                     @Override
                     public void onSuccess(StockResponse stockResponse) {
+                        Log.d(TAG, "onSuccess: " + stockResponse.toString());
                         if (stockResponse.getStatusCode().equals("200")) {
-                            insertStockReactivly(stockResponse);
-                            status = true;
+                            testSingle = true;
+                            try {
+                                insertStockReactivly(stockResponse);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         } else if (stockResponse.getStatusCode().equals("400")) {
-                            insertUnavailableStockReactivly(barcode);
-                            status = false;
+                            testSingle = false;
+                            try {
+                                insertUnavailableStockReactivly(barcode);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 
@@ -195,10 +210,11 @@ public class StockViewModel extends AndroidViewModel {
                         Log.e(TAG, "onError: ", e);
                     }
                 });
-        return status;
+        return testSingle;
     }
 
-    private void insertUnavailableStockReactivly(long barcode) {
+
+    public void insertUnavailableStockReactivly(long barcode) {
         StockUnavailable stockUnavailable = new StockUnavailable(barcode);
         repository.insertUnavailable(stockUnavailable)
                 .subscribeOn(Schedulers.io())
@@ -216,7 +232,7 @@ public class StockViewModel extends AndroidViewModel {
                 });
     }
 
-    private void insertStockReactivly(StockResponse stockResponse) {
+    public void insertStockReactivly(StockResponse stockResponse) {
         repository.insert(stockResponse.getData())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

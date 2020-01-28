@@ -21,6 +21,7 @@ public class BaseActivity extends DaggerAppCompatActivity {
 
     @Inject
     public SessionManager sessionManager;
+
     private SharedPreferences sharedPreferences;
 
     @Override

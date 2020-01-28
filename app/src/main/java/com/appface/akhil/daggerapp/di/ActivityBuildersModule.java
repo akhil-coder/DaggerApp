@@ -10,6 +10,7 @@ import com.appface.akhil.daggerapp.di.auth.AuthModule;
 import com.appface.akhil.daggerapp.di.auth.AuthViewModelsModule;
 import com.appface.akhil.daggerapp.ui.main.MainActivity;
 import com.appface.akhil.daggerapp.ui.main.scanner.ScannerActivity;
+import com.appface.akhil.daggerapp.ui.splashscreen.SplashScreenActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -25,4 +26,7 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector( modules = {ScannerModule.class, ScannerViewModelsModule.class})
     abstract ScannerActivity contributeScannerActivity();
+
+    @ContributesAndroidInjector
+    abstract SplashScreenActivity contributeSplashScreenActivity();
 }

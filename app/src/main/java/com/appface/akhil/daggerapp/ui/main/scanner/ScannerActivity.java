@@ -13,14 +13,18 @@ import android.widget.Toast;
 
 import com.appface.akhil.daggerapp.BaseActivity;
 import com.appface.akhil.daggerapp.R;
+import com.appface.akhil.daggerapp.model.Category;
 import com.appface.akhil.daggerapp.model.Stock;
 import com.appface.akhil.daggerapp.model.StockRepository;
+import com.appface.akhil.daggerapp.model.StockResponse;
 import com.appface.akhil.daggerapp.ui.main.MainActivity;
+import com.appface.akhil.daggerapp.ui.main.Resource;
 import com.appface.akhil.daggerapp.ui.main.posts.PostsViewModel;
 import com.appface.akhil.daggerapp.ui.main.posts.StockViewModel;
 import com.appface.akhil.daggerapp.viewmodelproviderfactory.ViewModelProviderFactory;
 import com.google.zxing.Result;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -30,6 +34,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -43,6 +48,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -156,17 +162,57 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         final String scanResult = result.getText();
         try {
             long barcode = Long.parseLong(scanResult);
-            boolean resultStatus = viewModel.checkStockOnline(barcode);
-            if(resultStatus){
-                Dialog dialog = new Dialog(ScannerActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_stock_not_found);
-                dialog.show();
-            }
+
+
+            checkStockOnline(barcode);
+
+
+
         } catch (Exception e) {
-            Log.e(TAG, "handleResult: ",e );
+            Log.e(TAG, "handleResult: ", e);
         }
         runTimer();
+    }
+
+
+
+    public void checkStockOnline(long barcode) {
+
+        viewModel.mainApi.retrieveproduct(barcode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<StockResponse>() {
+                    @Override
+                    public void onSuccess(StockResponse stockResponse) {
+                        Log.d(TAG, "onSuccess: " + stockResponse.toString());
+                        if (stockResponse.getStatusCode().equals("200")) {
+                            try {
+                                viewModel.insertStockReactivly(stockResponse);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else if (stockResponse.getStatusCode().equals("400")) {
+                            displayNoStockDialog();
+                            try {
+                                viewModel.insertUnavailableStockReactivly(barcode);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "onError: ", e);
+                    }
+                });
+    }
+
+    private void displayNoStockDialog() {
+        Dialog dialog = new Dialog(ScannerActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_stock_not_found);
+        dialog.show();
     }
 
     private void runTimer() {

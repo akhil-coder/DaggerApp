@@ -67,4 +67,16 @@ public class Stock {
     public int hashCode() {
         return Objects.hash(brand, productDetails, barcode, stockQty, priority);
     }
+
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                ", barcode=" + barcode +
+                ", stockQty=" + stockQty +
+                ", priority=" + priority +
+                '}';
+    }
 }

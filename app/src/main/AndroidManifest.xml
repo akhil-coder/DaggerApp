@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-feature android:name="android.hardware.camera2" />
 
     <application
@@ -16,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.main.settings.SettingsActivity"></activity>
+        <activity android:name=".ui.splashscreen.SplashScreenActivity"></activity>
+        <activity android:name=".ui.main.settings.SettingsActivity" />
         <activity android:name=".ui.auth.AuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
