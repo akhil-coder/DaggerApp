@@ -2,18 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="500dp"
     android:background="@color/red"
     android:orientation="vertical"
     android:weightSum="4">
 
     <ImageView
+        android:padding="40dp"
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/caution" />
+        app:srcCompat="@drawable/warningpost"
+        android:background="@color/red"/>
 
     <TextView
         android:id="@+id/textView5"
@@ -21,7 +23,7 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="Stock Not Found"
+        android:text="Stock Not Found In Inventory"
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold|italic" />
 </LinearLayout>

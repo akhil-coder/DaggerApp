@@ -1,4 +1,4 @@
-package com.appface.akhil.daggerapp.ui.main.profile;
+package com.appface.akhil.daggerapp.ui.main.availablestocks.subcategory;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.appface.akhil.daggerapp.R;
 import com.appface.akhil.daggerapp.model.Stock;
-import com.appface.akhil.daggerapp.model.StockUnavailable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +14,15 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class UnavailbaleStocksRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<StockUnavailable> posts = new ArrayList<>();
+    private List<Stock> posts = new ArrayList<>();
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_category_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_post_list_item, parent, false);
         return new PostViewHolder(view);
-
     }
 
     @Override
@@ -34,26 +32,28 @@ public class UnavailbaleStocksRecyclerAdapter extends RecyclerView.Adapter<Recyc
 
     @Override
     public int getItemCount() {
+
         return posts.size();
     }
 
-    public void setPosts(List<StockUnavailable> posts){
+    public void setPosts(List<Stock> posts){
         this.posts = posts;
         notifyDataSetChanged();
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder{
 
-        TextView title;
+        TextView  productDetails, stockQty;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.title);
+            productDetails = itemView.findViewById(R.id.tv_productdetails);
+            stockQty = itemView.findViewById(R.id.tv_stockqty);
         }
 
-        public void bind(StockUnavailable stock){
-            long barcode = stock.getBarcode();
-            title.setText(String.valueOf(stock.getBarcode()));
+        public void bind(Stock stock){
+            productDetails.setText(stock.getProductDetails());
+            stockQty.setText(String.valueOf(stock.getStockQty()));
         }
     }
 }

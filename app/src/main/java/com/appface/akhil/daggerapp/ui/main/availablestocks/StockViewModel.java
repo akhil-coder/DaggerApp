@@ -1,11 +1,8 @@
-package com.appface.akhil.daggerapp.ui.main.posts;
+package com.appface.akhil.daggerapp.ui.main.availablestocks;
 
 import android.app.Application;
-import android.app.Dialog;
 import android.util.Log;
-import android.view.Window;
 
-import com.appface.akhil.daggerapp.R;
 import com.appface.akhil.daggerapp.SessionManager;
 import com.appface.akhil.daggerapp.model.Category;
 import com.appface.akhil.daggerapp.model.Stock;
@@ -14,7 +11,7 @@ import com.appface.akhil.daggerapp.model.StockResponse;
 import com.appface.akhil.daggerapp.model.StockUnavailable;
 import com.appface.akhil.daggerapp.network.main.MainApi;
 import com.appface.akhil.daggerapp.ui.main.Resource;
-import com.appface.akhil.daggerapp.ui.main.scanner.ScannerActivity;
+import com.appface.akhil.daggerapp.util.SingleLiveEvent;
 
 import java.util.List;
 
@@ -28,7 +25,6 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
@@ -47,7 +43,8 @@ public class StockViewModel extends AndroidViewModel {
     private final SessionManager sessionManager;
     public final MainApi mainApi;
     private boolean status;
-    boolean testSingle;
+    Boolean testSingle;
+    public SingleLiveEvent<Boolean> dialogEvent;
 
     @Inject
     Retrofit retrofit;
@@ -58,6 +55,8 @@ public class StockViewModel extends AndroidViewModel {
         repository = new StockRepository(application);
         this.mainApi = mainApi;
         this.sessionManager = sessionManager;
+        dialogEvent = new SingleLiveEvent<>();
+        dialogEvent.setValue(true);
     }
 
     public MediatorLiveData<Resource<List<Stock>>> observePosts() {
@@ -179,7 +178,7 @@ public class StockViewModel extends AndroidViewModel {
         return stockListUnavailable;
     }
 
-    public boolean checkStockOnline(long barcode) {
+    public void checkStockOnline(long barcode) {
 
         mainApi.retrieveproduct(barcode)
                 .subscribeOn(Schedulers.io())
@@ -189,14 +188,14 @@ public class StockViewModel extends AndroidViewModel {
                     public void onSuccess(StockResponse stockResponse) {
                         Log.d(TAG, "onSuccess: " + stockResponse.toString());
                         if (stockResponse.getStatusCode().equals("200")) {
-                            testSingle = true;
+                            dialogEvent.setValue(true);
                             try {
                                 insertStockReactivly(stockResponse);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         } else if (stockResponse.getStatusCode().equals("400")) {
-                            testSingle = false;
+                            dialogEvent.setValue(false);
                             try {
                                 insertUnavailableStockReactivly(barcode);
                             } catch (Exception e) {
@@ -210,7 +209,6 @@ public class StockViewModel extends AndroidViewModel {
                         Log.e(TAG, "onError: ", e);
                     }
                 });
-        return testSingle;
     }
 
 

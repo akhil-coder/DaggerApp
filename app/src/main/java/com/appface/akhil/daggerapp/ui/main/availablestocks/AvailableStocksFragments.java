@@ -1,4 +1,4 @@
-package com.appface.akhil.daggerapp.ui.main.posts;
+package com.appface.akhil.daggerapp.ui.main.availablestocks;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 
 import com.appface.akhil.daggerapp.R;
 import com.appface.akhil.daggerapp.model.Category;
-import com.appface.akhil.daggerapp.model.Stock;
-import com.appface.akhil.daggerapp.models.Post;
 import com.appface.akhil.daggerapp.ui.main.Resource;
 import com.appface.akhil.daggerapp.util.VerticalSpacingItemDecoration;
 import com.appface.akhil.daggerapp.viewmodelproviderfactory.ViewModelProviderFactory;
@@ -26,15 +24,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.DaggerFragment;
 
-public class PostsFragments extends DaggerFragment {
+public class AvailableStocksFragments extends DaggerFragment {
 
-    private static final String TAG = "PostsFragments";
+    private static final String TAG = "AvailableStocks";
 
     private StockViewModel viewModel;
     private RecyclerView recyclerView;
 
     @Inject
-    PostsRecyclerAdapter adapter;
+    AvailableStocksRecyclerAdapter adapter;
 
     @Inject
     ViewModelProviderFactory providerFactory;

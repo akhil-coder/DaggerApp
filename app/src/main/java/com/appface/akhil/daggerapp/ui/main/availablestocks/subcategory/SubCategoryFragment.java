@@ -1,4 +1,4 @@
-package com.appface.akhil.daggerapp.ui.main.posts.subcategory;
+package com.appface.akhil.daggerapp.ui.main.availablestocks.subcategory;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import com.appface.akhil.daggerapp.R;
 import com.appface.akhil.daggerapp.model.Stock;
 import com.appface.akhil.daggerapp.ui.main.Resource;
-import com.appface.akhil.daggerapp.ui.main.posts.PostsFragments;
-import com.appface.akhil.daggerapp.ui.main.posts.PostsRecyclerAdapter;
-import com.appface.akhil.daggerapp.ui.main.posts.StockViewModel;
+import com.appface.akhil.daggerapp.ui.main.availablestocks.StockViewModel;
 import com.appface.akhil.daggerapp.util.VerticalSpacingItemDecoration;
 import com.appface.akhil.daggerapp.viewmodelproviderfactory.ViewModelProviderFactory;
 
@@ -29,7 +27,7 @@ import dagger.android.support.DaggerFragment;
 
 public class SubCategoryFragment extends DaggerFragment {
 
-    private static final String TAG = "PostsFragments";
+    private static final String TAG = "AvailableStocksFragments";
 
     private StockViewModel viewModel;
     private RecyclerView recyclerView;

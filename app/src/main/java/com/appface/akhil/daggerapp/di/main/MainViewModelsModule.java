@@ -1,8 +1,8 @@
 package com.appface.akhil.daggerapp.di.main;
 
 import com.appface.akhil.daggerapp.di.ViewModelKey;
-import com.appface.akhil.daggerapp.ui.main.posts.PostsViewModel;
-import com.appface.akhil.daggerapp.ui.main.profile.ProfileViewModel;
+import com.appface.akhil.daggerapp.ui.main.availablestocks.PostsViewModel;
+import com.appface.akhil.daggerapp.ui.main.unavailablestocks.ProfileViewModel;
 
 import androidx.lifecycle.ViewModel;
 import dagger.Binds;

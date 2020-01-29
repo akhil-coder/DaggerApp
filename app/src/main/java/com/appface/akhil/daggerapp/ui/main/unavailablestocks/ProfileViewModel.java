@@ -1,4 +1,4 @@
-package com.appface.akhil.daggerapp.ui.main.profile;
+package com.appface.akhil.daggerapp.ui.main.unavailablestocks;
 
 import android.util.Log;
 

@@ -1,23 +1,16 @@
-package com.appface.akhil.daggerapp.ui.main.profile;
+package com.appface.akhil.daggerapp.ui.main.unavailablestocks;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appface.akhil.daggerapp.R;
-import com.appface.akhil.daggerapp.model.Stock;
 import com.appface.akhil.daggerapp.model.StockUnavailable;
-import com.appface.akhil.daggerapp.models.User;
-import com.appface.akhil.daggerapp.ui.auth.AuthResource;
 import com.appface.akhil.daggerapp.ui.main.Resource;
-import com.appface.akhil.daggerapp.ui.main.posts.PostsFragments;
-import com.appface.akhil.daggerapp.ui.main.posts.PostsRecyclerAdapter;
-import com.appface.akhil.daggerapp.ui.main.posts.StockViewModel;
+import com.appface.akhil.daggerapp.ui.main.availablestocks.StockViewModel;
 import com.appface.akhil.daggerapp.util.VerticalSpacingItemDecoration;
 import com.appface.akhil.daggerapp.viewmodelproviderfactory.ViewModelProviderFactory;
 
@@ -33,9 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.DaggerFragment;
 
-public class ProfileFragment extends DaggerFragment {
+public class UnavailableStocksFragment extends DaggerFragment {
 
-    private static final String TAG = "ProfileFragment";
+    private static final String TAG = "UnavailableStocksFragment";
 
     private StockViewModel viewModel;
     private TextView email, username, website;
@@ -55,8 +48,6 @@ public class ProfileFragment extends DaggerFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onViewCreated: PF was created");
-        getActivity().setTitle("Stock Unavailable");
         recyclerView = view.findViewById(R.id.recycler_view);
         initRecyclerView();
         viewModel = ViewModelProviders.of(this, providerFactory).get(StockViewModel.class);

@@ -3,7 +3,6 @@ package com.appface.akhil.daggerapp.ui.main.scanner;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,40 +12,25 @@ import android.widget.Toast;
 
 import com.appface.akhil.daggerapp.BaseActivity;
 import com.appface.akhil.daggerapp.R;
-import com.appface.akhil.daggerapp.model.Category;
-import com.appface.akhil.daggerapp.model.Stock;
 import com.appface.akhil.daggerapp.model.StockRepository;
 import com.appface.akhil.daggerapp.model.StockResponse;
-import com.appface.akhil.daggerapp.ui.main.MainActivity;
-import com.appface.akhil.daggerapp.ui.main.Resource;
-import com.appface.akhil.daggerapp.ui.main.posts.PostsViewModel;
-import com.appface.akhil.daggerapp.ui.main.posts.StockViewModel;
+import com.appface.akhil.daggerapp.ui.main.availablestocks.StockViewModel;
 import com.appface.akhil.daggerapp.viewmodelproviderfactory.ViewModelProviderFactory;
 import com.google.zxing.Result;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -77,17 +61,10 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         setContentView(scannerView);
         viewModel = ViewModelProviders.of(this, providerFactory).get(StockViewModel.class);
         checkPermissions();
+        observeDialogBox();
     }
 
-    private void checkPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkPermission()) {
-                Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
-            } else {
-                requestPermissions();
-            }
-        }
-    }
+
 
     @Override
     protected void onResume() {
@@ -162,50 +139,11 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         final String scanResult = result.getText();
         try {
             long barcode = Long.parseLong(scanResult);
-
-
-            checkStockOnline(barcode);
-
-
-
+            viewModel.checkStockOnline(barcode);
         } catch (Exception e) {
             Log.e(TAG, "handleResult: ", e);
         }
         runTimer();
-    }
-
-
-
-    public void checkStockOnline(long barcode) {
-
-        viewModel.mainApi.retrieveproduct(barcode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<StockResponse>() {
-                    @Override
-                    public void onSuccess(StockResponse stockResponse) {
-                        Log.d(TAG, "onSuccess: " + stockResponse.toString());
-                        if (stockResponse.getStatusCode().equals("200")) {
-                            try {
-                                viewModel.insertStockReactivly(stockResponse);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else if (stockResponse.getStatusCode().equals("400")) {
-                            displayNoStockDialog();
-                            try {
-                                viewModel.insertUnavailableStockReactivly(barcode);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "onError: ", e);
-                    }
-                });
     }
 
     private void displayNoStockDialog() {
@@ -235,5 +173,25 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
 
     void cameraReset() {
         scannerView.resumeCameraPreview(this);
+    }
+
+    void observeDialogBox(){
+        viewModel.dialogEvent.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(!aBoolean)
+                displayNoStockDialog();
+            }
+        });
+    }
+
+    private void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkPermission()) {
+                Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
+            } else {
+                requestPermissions();
+            }
+        }
     }
 }

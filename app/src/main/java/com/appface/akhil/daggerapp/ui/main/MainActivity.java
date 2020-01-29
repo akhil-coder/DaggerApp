@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.appface.akhil.daggerapp.BaseActivity;
 import com.appface.akhil.daggerapp.R;
@@ -86,6 +85,7 @@ public class MainActivity extends BaseActivity  {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 // TODO: UPdate menu items
 //    private void initMenuTitles() {
 //        MenuItem bedMenuItem = menu.findItem(R.id.scanTime);

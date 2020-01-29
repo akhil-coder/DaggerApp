@@ -1,4 +1,4 @@
-package com.appface.akhil.daggerapp.ui.main.posts;
+package com.appface.akhil.daggerapp.ui.main.availablestocks;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,18 +8,15 @@ import android.widget.TextView;
 
 import com.appface.akhil.daggerapp.R;
 import com.appface.akhil.daggerapp.model.Category;
-import com.appface.akhil.daggerapp.model.Stock;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.functions.Action;
 
-public class PostsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AvailableStocksRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Category> posts = new ArrayList<>();
     String brand;

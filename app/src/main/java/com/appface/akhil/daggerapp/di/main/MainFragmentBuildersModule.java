@@ -1,8 +1,8 @@
 package com.appface.akhil.daggerapp.di.main;
 
-import com.appface.akhil.daggerapp.ui.main.posts.PostsFragments;
-import com.appface.akhil.daggerapp.ui.main.posts.subcategory.SubCategoryFragment;
-import com.appface.akhil.daggerapp.ui.main.profile.ProfileFragment;
+import com.appface.akhil.daggerapp.ui.main.availablestocks.AvailableStocksFragments;
+import com.appface.akhil.daggerapp.ui.main.availablestocks.subcategory.SubCategoryFragment;
+import com.appface.akhil.daggerapp.ui.main.unavailablestocks.UnavailableStocksFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -11,10 +11,10 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class MainFragmentBuildersModule {
 
     @ContributesAndroidInjector
-    abstract ProfileFragment contributeProfileFragment();
+    abstract UnavailableStocksFragment contributeProfileFragment();
 
     @ContributesAndroidInjector
-    abstract PostsFragments contributePostsFragment();
+    abstract AvailableStocksFragments contributePostsFragment();
 
     @ContributesAndroidInjector
     abstract SubCategoryFragment contributeSubCategoryFragment();

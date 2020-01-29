@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@id/foundScreen"
-        android:name="com.appface.akhil.daggerapp.ui.main.posts.PostsFragments"
+        android:name="com.appface.akhil.daggerapp.ui.main.availablestocks.AvailableStocksFragments"
         android:label="@string/found"
         tools:layout="@layout/fragment_posts" >
 
@@ -26,13 +26,13 @@
 
     <fragment
         android:id="@id/notFoundScreen"
-        android:name="com.appface.akhil.daggerapp.ui.main.profile.ProfileFragment"
+        android:name="com.appface.akhil.daggerapp.ui.main.unavailablestocks.UnavailableStocksFragment"
         android:label="@string/notfound"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@id/subCategoryScreen"
-        android:name="com.appface.akhil.daggerapp.ui.main.posts.subcategory.SubCategoryFragment"
+        android:name="com.appface.akhil.daggerapp.ui.main.availablestocks.subcategory.SubCategoryFragment"
         android:label="@string/found"
         tools:layout="@layout/fragment_posts" />
 
