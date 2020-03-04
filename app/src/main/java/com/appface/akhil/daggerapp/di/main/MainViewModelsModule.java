@@ -14,7 +14,7 @@ public abstract class MainViewModelsModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ProfileViewModel.class)
+    @ViewModelKey(ProfileViewModel.class)                           // Maps viewmodel to multibinding
     public abstract ViewModel bindProfileViewModel(ProfileViewModel viewModel);
 
     @Binds

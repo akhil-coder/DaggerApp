@@ -31,6 +31,8 @@ public class AuthActivity extends DaggerAppCompatActivity implements View.OnClic
 
     private EditText userId;
 
+    private ProgressBar progressBar;
+
     @Inject
     Drawable logo;
 
@@ -39,8 +41,6 @@ public class AuthActivity extends DaggerAppCompatActivity implements View.OnClic
 
     @Inject
     ViewModelProviderFactory providerFactory;
-    private ProgressBar progressBar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

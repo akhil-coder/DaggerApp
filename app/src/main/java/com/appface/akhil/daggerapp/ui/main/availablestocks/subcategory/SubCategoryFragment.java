@@ -1,7 +1,6 @@
 package com.appface.akhil.daggerapp.ui.main.availablestocks.subcategory;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,18 +57,15 @@ public class SubCategoryFragment extends DaggerFragment {
             @Override
             public void onChanged(Resource<List<Stock>> listResource) {
                 if(listResource != null) {
-                    Log.d(TAG, "onChanged: " + listResource.data);
                     switch (listResource.status){
                         case LOADING: {
                             break;
                         }
                         case SUCCESS:{
-                            Log.d(TAG, "onChanged: got posts");
                             adapter.setPosts(listResource.data);
                             break;
                         }
                         case ERROR:{
-                            Log.d(TAG, "onChanged: " + listResource.message );
                             break;
                         }
                     }

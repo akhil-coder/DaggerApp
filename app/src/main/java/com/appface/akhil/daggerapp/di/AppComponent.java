@@ -13,14 +13,14 @@ import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 
 @Singleton
-@Component( modules = { AndroidSupportInjectionModule.class, ActivityBuildersModule.class, AppModule.class, ViewModelFactoryModule.class })
+@Component(modules = {AndroidSupportInjectionModule.class,                           // Contains required classes to dagger classes
+        ActivityBuildersModule.class, AppModule.class, ViewModelFactoryModule.class})
 public interface AppComponent extends AndroidInjector<BaseApplication> {
 
     SessionManager sessionManager();
 
     @Component.Builder
     interface Builder {
-
         @BindsInstance
         Builder application(Application application);
 
