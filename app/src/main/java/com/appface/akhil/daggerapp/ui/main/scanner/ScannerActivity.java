@@ -28,6 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -42,10 +43,9 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
 
     private static final String TAG = "ScannerActivity";
     private static final int REQUEST_CAMERA = 1;
-    private ZXingScannerView scannerView;
     private final CompositeDisposable mDisposable = new CompositeDisposable();
     private StockViewModel viewModel;
-    public static int TIMER_VALUE ;
+    public static int TIMER_VALUE;
 
     @Inject
     StockRepository stockRepository;
@@ -53,18 +53,24 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
     @Inject
     ViewModelProviderFactory providerFactory;
 
+    private ZXingScannerView scannerView;
+    private ZXingScannerView zScanner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TIMER_VALUE = loadSharedPreferences();
+
+        setContentView(R.layout.activity_scanner);
+        zScanner = (ZXingScannerView) findViewById(R.id.zxscan);
+
         scannerView = new ZXingScannerView(this);
-        setContentView(scannerView);
+        zScanner.addView(scannerView);
+
         viewModel = ViewModelProviders.of(this, providerFactory).get(StockViewModel.class);
         checkPermissions();
         observeDialogBox();
     }
-
-
 
     @Override
     protected void onResume() {
@@ -97,7 +103,6 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this, new String[]{CAMERA}, REQUEST_CAMERA);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -175,12 +180,12 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         scannerView.resumeCameraPreview(this);
     }
 
-    void observeDialogBox(){
+    void observeDialogBox() {
         viewModel.dialogEvent.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(!aBoolean)
-                displayNoStockDialog();
+                if (!aBoolean)
+                    displayNoStockDialog();
             }
         });
     }
